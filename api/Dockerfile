@@ -8,6 +8,7 @@ COPY api/ /app/api/
 COPY data/topology.json /app/data/topology.json
 COPY data/graph_features.json /app/data/graph_features.json
 COPY data/model.joblib /app/data/model.joblib
+COPY data/model_metrics.json /app/data/model_metrics.json
 
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8080
