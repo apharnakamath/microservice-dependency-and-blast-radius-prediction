@@ -4,8 +4,6 @@ Predicts what happens next when a microservice fails: which other services get h
 
 **Live demo:** https://microservice-dependency-and-blast-radius.onrender.com
 
-**API:** https://blast-radius-api-rqgr.onrender.com 
-
 ---
 
 ## What it does
