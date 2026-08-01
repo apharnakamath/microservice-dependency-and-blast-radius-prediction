@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Blast Radius — Incident Prediction Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+  :root{
+    --bg: #0B0F14;
+    --panel: #121924;
+    --panel-2: #0E141C;
+    --hairline: #202B37;
+    --text: #E8EEF3;
+    --muted: #7E8B98;
+    --muted-2: #52606D;
+    --cool: #3FB8AF;
+    --cool-dim: #235B57;
+    --entry: #7C93F0;
+    --amber: #E8A33D;
+    --crimson: #E1524B;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:var(--bg); color:var(--text); font-family:var(--sans); }
+  #app{ display:grid; grid-template-rows:auto 1fr; height:100%; }
+
+  /* ---- top bar ---- */
+  #topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px; border-bottom:1px solid var(--hairline);
+    background:linear-gradient(180deg, #101720, #0C121A);
+  }
+  #brand{ display:flex; align-items:baseline; gap:10px; }
+  #brand .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--muted-2); text-transform:uppercase; }
+  #brand h1{ font-size:16px; margin:0; font-weight:600; letter-spacing:.02em; }
+  #brand h1 .dot{ color:var(--crimson); }
+  #metricpill{
+    font-family:var(--mono); font-size:12px; color:var(--muted); display:flex; gap:14px; align-items:center;
+  }
+  #metricpill b{ color:var(--cool); font-weight:600; }
+  #metricpill .sep{ width:1px; height:14px; background:var(--hairline); }
+
+  /* ---- layout ---- */
+  #main{ display:grid; grid-template-columns: 1fr 340px; min-height:0; }
+  #stage{ position:relative; overflow:hidden; background:
+      radial-gradient(1200px 700px at 30% 20%, #0E151E 0%, var(--bg) 60%); }
+  #stage svg{ width:100%; height:100%; display:block; }
+  #stagehint{
+    position:absolute; bottom:16px; left:18px; font-family:var(--mono); font-size:11px; color:var(--muted-2);
+  }
+
+  #panel{ border-left:1px solid var(--hairline); background:var(--panel); display:flex; flex-direction:column; min-height:0; }
+  .section{ padding:16px 18px; border-bottom:1px solid var(--hairline); }
+  .section h2{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 12px 0; }
+
+  select, input[type=range]{ width:100%; }
+  select{
+    background:var(--panel-2); color:var(--text); border:1px solid var(--hairline); border-radius:4px;
+    padding:8px 10px; font-family:var(--mono); font-size:13px; margin-bottom:12px;
+  }
+  .row{ display:flex; gap:8px; margin-bottom:12px; }
+  .modebtn{
+    flex:1; padding:8px 0; text-align:center; border:1px solid var(--hairline); border-radius:4px;
+    font-family:var(--mono); font-size:12px; cursor:pointer; color:var(--muted); background:var(--panel-2);
+    transition:all .15s;
+  }
+  .modebtn.active{ border-color:var(--amber); color:var(--amber); background:#1B140A; }
+  #sevlabel{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:4px; }
+  #sevval{ color:var(--text); }
+  input[type=range]{
+    -webkit-appearance:none; height:3px; background:var(--hairline); border-radius:2px; margin:10px 0 16px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:var(--amber); cursor:pointer;
+    box-shadow:0 0 0 3px rgba(232,163,61,.15);
+  }
+  #simbtn{
+    width:100%; padding:11px 0; background:var(--crimson); color:#160707; border:none; border-radius:4px;
+    font-family:var(--mono); font-weight:600; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    cursor:pointer; transition:filter .15s;
+  }
+  #simbtn:hover{ filter:brightness(1.12); }
+  #simbtn:disabled{ opacity:.5; cursor:default; }
+
+  #resultsSection{ flex:1; overflow-y:auto; padding-bottom:8px; }
+  #resultsMeta{ font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:10px; }
+  #resultsMeta .n{ color:var(--crimson); font-weight:600; }
+  .resultrow{
+    display:grid; grid-template-columns: 62px 1fr 46px; align-items:center; gap:10px;
+    padding:7px 0; border-bottom:1px solid #17202A; font-family:var(--mono); font-size:12px;
+    opacity:0; transform:translateY(4px); animation:reveal .35s forwards;
+  }
+  @keyframes reveal{ to{ opacity:1; transform:translateY(0); } }
+  .resultrow .svc{ color:var(--text); }
+  .resultrow .dist{ color:var(--muted-2); font-size:10px; }
+  .barwrap{ height:5px; background:#1B222B; border-radius:3px; overflow:hidden; }
+  .bar{ height:100%; border-radius:3px; }
+  .resultrow .pct{ text-align:right; color:var(--muted); }
+
+  #empty{ padding:18px; font-family:var(--mono); font-size:12px; color:var(--muted-2); line-height:1.6; }
+
+  .node-label{ font-family:var(--mono); font-size:9px; fill:var(--muted); pointer-events:none; }
+  .edge{ stroke:#26313D; stroke-width:1; fill:none; marker-end:url(#arrow); }
+  .ring{ fill:none; stroke:var(--crimson); opacity:0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div id="brand">
+      <span class="eyebrow">Incident Console</span>
+      <h1>BLAST<span class="dot">·</span>RADIUS</h1>
+    </div>
+    <div id="metricpill">
+      <span>model f1 <b id="mF1">—</b></span>
+      <div class="sep"></div>
+      <span>naive baseline f1 <span id="mBase">—</span></span>
+      <div class="sep"></div>
+      <span style="color:var(--cool)">+<b id="mDelta">—</b> over baseline</span>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="stage">
+      <svg id="graphsvg"></svg>
+      <div id="stagehint">click a node, or use the panel — then run simulation</div>
+    </div>
+
+    <div id="panel">
+      <div class="section">
+        <h2>Simulate Failure</h2>
+        <select id="serviceSelect"></select>
+        <div class="row">
+          <div class="modebtn active" data-mode="down">DOWN</div>
+          <div class="modebtn" data-mode="slow">SLOW</div>
+        </div>
+        <div id="sevlabel"><span>severity</span><span id="sevval">1.00</span></div>
+        <input type="range" id="sevSlider" min="0" max="1" step="0.05" value="1.0" />
+        <button id="simbtn">Run Simulation</button>
+      </div>
+      <div id="resultsSection">
+        <div class="section" style="border-bottom:none;">
+          <h2>Predicted Blast Radius</h2>
+          <div id="resultsMeta"></div>
+          <div id="resultsList"></div>
+          <div id="empty">No simulation run yet. Pick a service and hit Run Simulation — the graph will light up in the order the failure is predicted to spread.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8080";
+// Matches the API_KEY env var the api container is started with (defaults
+// to "devkey" in docker-compose.yml). Fine for a local demo; for a real
+// deployment swap this for a proper login flow.
+const API_HEADERS = { "X-API-Key": "devkey" };
+const heat = d3.scaleLinear().domain([0,0.5,1]).range(["#3FB8AF","#E8A33D","#E1524B"]).clamp(true);
+const roleColor = { entrypoint: "#7C93F0", hub: "#9AA7B4", leaf: "#5C6B79", "spof-leaf": "#5C6B79" };
+
+let graphData = null, sim = null, nodeSel = null, edgeSel = null, selectedService = null;
+let mode = "down", severity = 1.0;
+
+async function loadMetrics(){
+  try{
+    const m = await (await fetch(`${API}/metrics`, { headers: API_HEADERS })).json();
+    document.getElementById("mF1").textContent = m.model.classifier.f1.toFixed(3);
+    document.getElementById("mBase").textContent = m.naive_baseline.classifier.f1.toFixed(3);
+    document.getElementById("mDelta").textContent = m.f1_improvement_over_baseline.toFixed(3);
+  }catch(e){ console.warn("metrics unavailable", e); }
+}
+
+async function loadGraph(){
+  graphData = await (await fetch(`${API}/graph`, { headers: API_HEADERS })).json();
+  const select = document.getElementById("serviceSelect");
+  graphData.nodes.forEach(n=>{
+    const opt = document.createElement("option");
+    opt.value = n.id; opt.textContent = `${n.id}  (${n.role})`;
+    select.appendChild(opt);
+  });
+  selectedService = graphData.nodes[0].id;
+  select.value = selectedService;
+  renderGraph();
+}
+
+function renderGraph(){
+  const svg = d3.select("#graphsvg");
+  const stage = document.getElementById("stage");
+  const W = stage.clientWidth, H = stage.clientHeight;
+  svg.attr("viewBox", [0,0,W,H]);
+
+  svg.append("defs").append("marker")
+    .attr("id","arrow").attr("viewBox","0 -4 8 8").attr("refX",16).attr("refY",0)
+    .attr("markerWidth",6).attr("markerHeight",6).attr("orient","auto")
+    .append("path").attr("d","M0,-4L8,0L0,4").attr("fill","#26313D");
+
+  const nodes = graphData.nodes.map(d=>({...d}));
+  const links = graphData.edges.map(d=>({...d}));
+
+  sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d=>d.id).distance(90).strength(0.5))
+    .force("charge", d3.forceManyBody().strength(-260))
+    .force("center", d3.forceCenter(W/2, H/2))
+    .force("collide", d3.forceCollide(26))
+    .stop();
+  for (let i=0;i<300;i++) sim.tick();
+
+  const gEdges = svg.append("g");
+  edgeSel = gEdges.selectAll("line").data(links).join("line")
+    .attr("class","edge")
+    .attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
+    .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+
+  const gRings = svg.append("g").attr("id","rings");
+
+  const gNodes = svg.append("g");
+  const nodeGroup = gNodes.selectAll("g.node").data(nodes, d=>d.id).join("g")
+    .attr("class","node")
+    .attr("transform", d=>`translate(${d.x},${d.y})`)
+    .style("cursor","pointer")
+    .on("click", (evt,d)=>{
+      selectedService = d.id;
+      document.getElementById("serviceSelect").value = d.id;
+    });
+
+  nodeGroup.append("circle")
+    .attr("r", d => 8 + Math.min(14, (d.in_degree||0)*2 + (d.out_degree||0)))
+    .attr("fill", d => roleColor[d.role] || "#5C6B79")
+    .attr("stroke", d => d.is_articulation_point ? "#E1524B" : "#0B0F14")
+    .attr("stroke-width", d => d.is_articulation_point ? 2 : 1.5)
+    .attr("id", d => `node-${d.id}`);
+
+  nodeGroup.append("text")
+    .attr("class","node-label")
+    .attr("text-anchor","middle")
+    .attr("dy", d => -(12 + Math.min(14,(d.in_degree||0)*2+(d.out_degree||0))))
+    .text(d=>d.id);
+
+  nodeSel = nodeGroup;
+  window.__ringsLayer = gRings;
+  window.__nodesById = Object.fromEntries(nodes.map(n=>[n.id,n]));
+}
+
+function resetNodeColors(){
+  Object.values(window.__nodesById).forEach(d=>{
+    d3.select(`#node-${d.id}`).transition().duration(200)
+      .attr("fill", roleColor[d.role] || "#5C6B79");
+  });
+  d3.select("#rings").selectAll("*").remove();
+}
+
+function drawRing(x,y,maxR,delay){
+  window.__ringsLayer.append("circle")
+    .attr("class","ring").attr("cx",x).attr("cy",y).attr("r",4)
+    .attr("stroke-width",2)
+    .transition().delay(delay).duration(900).ease(d3.easeCubicOut)
+    .attr("r", maxR).attr("opacity",0.55)
+    .transition().duration(300).attr("opacity",0);
+}
+
+async function runSimulation(){
+  const btn = document.getElementById("simbtn");
+  btn.disabled = true; btn.textContent = "Simulating…";
+  resetNodeColors();
+  document.getElementById("empty").style.display = "none";
+  document.getElementById("resultsList").innerHTML = "";
+
+  const res = await fetch(`${API}/predict/${selectedService}?mode=${mode}&severity=${severity}`, { headers: API_HEADERS });
+  const data = await res.json();
+
+  document.getElementById("resultsMeta").innerHTML =
+    `failing <b style="color:var(--text)">${data.failed_service}</b> (${mode}, sev ${severity.toFixed(2)}) &rarr; `
+    + `<span class="n">${data.predicted_impacted_count}</span> / ${data.blast_radius.length} services predicted impacted`;
+
+  // group by graph_distance so the graph lights up in cascade order
+  const byDist = {};
+  data.blast_radius.forEach(r=>{
+    const dkey = r.graph_distance ?? 99;
+    (byDist[dkey] = byDist[dkey] || []).push(r);
+  });
+  const distances = Object.keys(byDist).map(Number).sort((a,b)=>a-b);
+
+  const origin = window.__nodesById[selectedService];
+  const list = document.getElementById("resultsList");
+
+  distances.forEach((dist, i)=>{
+    const delay = i * 550;
+    if (origin) drawRing(origin.x, origin.y, 60 + dist*90, delay);
+
+    byDist[dist].forEach(r=>{
+      setTimeout(()=>{
+        const color = heat(r.predicted_probability);
+        d3.select(`#node-${r.service}`).transition().duration(300).attr("fill", color);
+
+        const row = document.createElement("div");
+        row.className = "resultrow";
+        row.innerHTML = `
+          <span class="svc">${r.service}</span>
+          <span class="barwrap"><span class="bar" style="width:${(r.predicted_probability*100).toFixed(0)}%; background:${color}"></span></span>
+          <span class="pct">${(r.predicted_probability*100).toFixed(0)}%</span>
+        `;
+        list.appendChild(row);
+      }, delay);
+    });
+  });
+
+  setTimeout(()=>{ btn.disabled=false; btn.textContent="Run Simulation"; }, distances.length*550 + 200);
+}
+
+document.querySelectorAll(".modebtn").forEach(el=>{
+  el.addEventListener("click", ()=>{
+    document.querySelectorAll(".modebtn").forEach(x=>x.classList.remove("active"));
+    el.classList.add("active");
+    mode = el.dataset.mode;
+  });
+});
+document.getElementById("sevSlider").addEventListener("input", e=>{
+  severity = parseFloat(e.target.value);
+  document.getElementById("sevval").textContent = severity.toFixed(2);
+});
+document.getElementById("serviceSelect").addEventListener("change", e=>{
+  selectedService = e.target.value;
+});
+document.getElementById("simbtn").addEventListener("click", runSimulation);
+
+loadMetrics();
+loadGraph();
+</script>
+</body>
+</html>

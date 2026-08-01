@@ -1,0 +1,225 @@
+services:
+  svc-00:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-00
+      - PORT=9000
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-01:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-01
+      - PORT=9001
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-02:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-02
+      - PORT=9002
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-03:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-03
+      - PORT=9003
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-04:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-04
+      - PORT=9004
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-05:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-05
+      - PORT=9005
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-06:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-06
+      - PORT=9006
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-07:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-07
+      - PORT=9007
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-08:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-08
+      - PORT=9008
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-09:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-09
+      - PORT=9009
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-10:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-10
+      - PORT=9010
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-11:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-11
+      - PORT=9011
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-12:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-12
+      - PORT=9012
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-13:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-13
+      - PORT=9013
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-14:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-14
+      - PORT=9014
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-15:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-15
+      - PORT=9015
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-16:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-16
+      - PORT=9016
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  svc-17:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    environment:
+      - SERVICE_NAME=svc-17
+      - PORT=9017
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - API_KEY=${API_KEY:-devkey}
+    depends_on:
+      - svc-00
+      - svc-01
+      - svc-02
+      - svc-03
+      - svc-04
+      - svc-05
+      - svc-06
+      - svc-07
+      - svc-08
+      - svc-09
+      - svc-10
+      - svc-11
+      - svc-12
+      - svc-13
+      - svc-14
+      - svc-15
+      - svc-16
+      - svc-17
+    networks: [blast-radius]
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - api
+    networks: [blast-radius]
+    restart: unless-stopped
+
+networks:
+  blast-radius:
+    driver: bridge

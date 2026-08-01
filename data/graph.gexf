@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2026-08-01">
+    <creator>NetworkX 3.4.2</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="0" title="avg_latency_ms" type="double" />
+      <attribute id="1" title="error_rate" type="double" />
+    </attributes>
+    <nodes>
+      <node id="svc-04" label="svc-04" />
+      <node id="svc-10" label="svc-10" />
+      <node id="svc-00" label="svc-00" />
+      <node id="svc-06" label="svc-06" />
+      <node id="svc-15" label="svc-15" />
+      <node id="svc-14" label="svc-14" />
+      <node id="svc-07" label="svc-07" />
+      <node id="svc-09" label="svc-09" />
+      <node id="svc-12" label="svc-12" />
+      <node id="svc-16" label="svc-16" />
+      <node id="svc-17" label="svc-17" />
+      <node id="svc-02" label="svc-02" />
+      <node id="svc-05" label="svc-05" />
+      <node id="svc-13" label="svc-13" />
+      <node id="svc-11" label="svc-11" />
+      <node id="svc-03" label="svc-03" />
+      <node id="svc-08" label="svc-08" />
+      <node id="svc-01" label="svc-01" />
+    </nodes>
+    <edges>
+      <edge source="svc-04" target="svc-10" id="0" weight="1304">
+        <attvalues>
+          <attvalue for="0" value="85.11" />
+          <attvalue for="1" value="0.064" />
+        </attvalues>
+      </edge>
+      <edge source="svc-00" target="svc-04" id="1" weight="674">
+        <attvalues>
+          <attvalue for="0" value="253.43" />
+          <attvalue for="1" value="0.086" />
+        </attvalues>
+      </edge>
+      <edge source="svc-00" target="svc-06" id="2" weight="644">
+        <attvalues>
+          <attvalue for="0" value="299.17" />
+          <attvalue for="1" value="0.071" />
+        </attvalues>
+      </edge>
+      <edge source="svc-00" target="svc-09" id="3" weight="644">
+        <attvalues>
+          <attvalue for="0" value="483.4" />
+          <attvalue for="1" value="0.11" />
+        </attvalues>
+      </edge>
+      <edge source="svc-06" target="svc-10" id="4" weight="1239">
+        <attvalues>
+          <attvalue for="0" value="142.36" />
+          <attvalue for="1" value="0.026" />
+        </attvalues>
+      </edge>
+      <edge source="svc-06" target="svc-15" id="5" weight="1251">
+        <attvalues>
+          <attvalue for="0" value="164.92" />
+          <attvalue for="1" value="0.018" />
+        </attvalues>
+      </edge>
+      <edge source="svc-06" target="svc-14" id="6" weight="1253">
+        <attvalues>
+          <attvalue for="0" value="168.13" />
+          <attvalue for="1" value="0.019" />
+        </attvalues>
+      </edge>
+      <edge source="svc-07" target="svc-14" id="7" weight="1263">
+        <attvalues>
+          <attvalue for="0" value="138.73" />
+          <attvalue for="1" value="0.016" />
+        </attvalues>
+      </edge>
+      <edge source="svc-07" target="svc-16" id="8" weight="1272">
+        <attvalues>
+          <attvalue for="0" value="148.06" />
+          <attvalue for="1" value="0.028" />
+        </attvalues>
+      </edge>
+      <edge source="svc-07" target="svc-10" id="9" weight="1281">
+        <attvalues>
+          <attvalue for="0" value="149.58" />
+          <attvalue for="1" value="0.044" />
+        </attvalues>
+      </edge>
+      <edge source="svc-07" target="svc-17" id="10" weight="1267">
+        <attvalues>
+          <attvalue for="0" value="160.92" />
+          <attvalue for="1" value="0.021" />
+        </attvalues>
+      </edge>
+      <edge source="svc-07" target="svc-15" id="11" weight="1252">
+        <attvalues>
+          <attvalue for="0" value="164.81" />
+          <attvalue for="1" value="0.009" />
+        </attvalues>
+      </edge>
+      <edge source="svc-09" target="svc-12" id="12" weight="1271">
+        <attvalues>
+          <attvalue for="0" value="111.89" />
+          <attvalue for="1" value="0.027" />
+        </attvalues>
+      </edge>
+      <edge source="svc-09" target="svc-10" id="13" weight="1247">
+        <attvalues>
+          <attvalue for="0" value="130.7" />
+          <attvalue for="1" value="0.022" />
+        </attvalues>
+      </edge>
+      <edge source="svc-09" target="svc-08" id="14" weight="1276">
+        <attvalues>
+          <attvalue for="0" value="375.54" />
+          <attvalue for="1" value="0.041" />
+        </attvalues>
+      </edge>
+      <edge source="svc-02" target="svc-07" id="15" weight="664">
+        <attvalues>
+          <attvalue for="0" value="329.41" />
+          <attvalue for="1" value="0.036" />
+        </attvalues>
+      </edge>
+      <edge source="svc-02" target="svc-05" id="16" weight="650">
+        <attvalues>
+          <attvalue for="0" value="426.12" />
+          <attvalue for="1" value="0.055" />
+        </attvalues>
+      </edge>
+      <edge source="svc-05" target="svc-13" id="17" weight="2580">
+        <attvalues>
+          <attvalue for="0" value="173.51" />
+          <attvalue for="1" value="0.021" />
+        </attvalues>
+      </edge>
+      <edge source="svc-05" target="svc-11" id="18" weight="2588">
+        <attvalues>
+          <attvalue for="0" value="174.45" />
+          <attvalue for="1" value="0.021" />
+        </attvalues>
+      </edge>
+      <edge source="svc-05" target="svc-10" id="19" weight="2681">
+        <attvalues>
+          <attvalue for="0" value="169.87" />
+          <attvalue for="1" value="0.071" />
+        </attvalues>
+      </edge>
+      <edge source="svc-03" target="svc-05" id="20" weight="648">
+        <attvalues>
+          <attvalue for="0" value="416.91" />
+          <attvalue for="1" value="0.056" />
+        </attvalues>
+      </edge>
+      <edge source="svc-03" target="svc-08" id="21" weight="686">
+        <attvalues>
+          <attvalue for="0" value="447.14" />
+          <attvalue for="1" value="0.092" />
+        </attvalues>
+      </edge>
+      <edge source="svc-08" target="svc-11" id="22" weight="2496">
+        <attvalues>
+          <attvalue for="0" value="156.0" />
+          <attvalue for="1" value="0.009" />
+        </attvalues>
+      </edge>
+      <edge source="svc-08" target="svc-13" id="23" weight="2511">
+        <attvalues>
+          <attvalue for="0" value="168.25" />
+          <attvalue for="1" value="0.012" />
+        </attvalues>
+      </edge>
+      <edge source="svc-08" target="svc-16" id="24" weight="2529">
+        <attvalues>
+          <attvalue for="0" value="183.58" />
+          <attvalue for="1" value="0.025" />
+        </attvalues>
+      </edge>
+      <edge source="svc-08" target="svc-10" id="25" weight="2598">
+        <attvalues>
+          <attvalue for="0" value="168.96" />
+          <attvalue for="1" value="0.057" />
+        </attvalues>
+      </edge>
+      <edge source="svc-08" target="svc-15" id="26" weight="2525">
+        <attvalues>
+          <attvalue for="0" value="183.44" />
+          <attvalue for="1" value="0.017" />
+        </attvalues>
+      </edge>
+      <edge source="svc-01" target="svc-05" id="27" weight="696">
+        <attvalues>
+          <attvalue for="0" value="421.46" />
+          <attvalue for="1" value="0.121" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

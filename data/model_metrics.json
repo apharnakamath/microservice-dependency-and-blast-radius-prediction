@@ -1,0 +1,40 @@
+{
+  "n_train": 918,
+  "n_test": 306,
+  "positive_rate_test": 0.0719,
+  "model": {
+    "classifier": {
+      "accuracy": 0.9706,
+      "precision": 0.7097,
+      "recall": 1.0,
+      "f1": 0.8302,
+      "roc_auc": 0.9958
+    },
+    "regressor_mae": 0.0316
+  },
+  "naive_baseline": {
+    "classifier": {
+      "accuracy": 0.9248,
+      "precision": 0.4828,
+      "recall": 0.6364,
+      "f1": 0.549
+    },
+    "regressor_mae": 0.073
+  },
+  "f1_improvement_over_baseline": 0.2812,
+  "feature_importances": {
+    "graph_distance": 0.6917,
+    "injected_severity": 0.1218,
+    "affected_out_degree": 0.0663,
+    "affected_betweenness": 0.0261,
+    "failed_betweenness": 0.0198,
+    "direct_edge_timeout_ms": 0.0191,
+    "fault_mode_down": 0.0147,
+    "direct_edge_retries": 0.0144,
+    "failed_out_degree": 0.0119,
+    "affected_in_degree": 0.0059,
+    "failed_in_degree": 0.0044,
+    "failed_is_articulation_point": 0.0039,
+    "has_direct_edge": 0.0
+  }
+}

@@ -1,0 +1,279 @@
+{
+  "services": {
+    "svc-00": {
+      "port": 9000,
+      "calls": [
+        {
+          "target": "svc-04",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 13
+        },
+        {
+          "target": "svc-09",
+          "timeout_ms": 800,
+          "retries": 0,
+          "base_latency_ms": 32
+        },
+        {
+          "target": "svc-06",
+          "timeout_ms": 800,
+          "retries": 0,
+          "base_latency_ms": 10
+        }
+      ],
+      "role": "entrypoint"
+    },
+    "svc-01": {
+      "port": 9001,
+      "calls": [
+        {
+          "target": "svc-05",
+          "timeout_ms": 800,
+          "retries": 1,
+          "base_latency_ms": 39
+        }
+      ],
+      "role": "entrypoint"
+    },
+    "svc-02": {
+      "port": 9002,
+      "calls": [
+        {
+          "target": "svc-05",
+          "timeout_ms": 1500,
+          "retries": 0,
+          "base_latency_ms": 15
+        },
+        {
+          "target": "svc-07",
+          "timeout_ms": 2000,
+          "retries": 1,
+          "base_latency_ms": 22
+        }
+      ],
+      "role": "entrypoint"
+    },
+    "svc-03": {
+      "port": 9003,
+      "calls": [
+        {
+          "target": "svc-05",
+          "timeout_ms": 1500,
+          "retries": 0,
+          "base_latency_ms": 10
+        },
+        {
+          "target": "svc-08",
+          "timeout_ms": 800,
+          "retries": 1,
+          "base_latency_ms": 27
+        }
+      ],
+      "role": "entrypoint"
+    },
+    "svc-04": {
+      "port": 9004,
+      "calls": [
+        {
+          "target": "svc-10",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 10
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-05": {
+      "port": 9005,
+      "calls": [
+        {
+          "target": "svc-11",
+          "timeout_ms": 1500,
+          "retries": 2,
+          "base_latency_ms": 28
+        },
+        {
+          "target": "svc-13",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 27
+        },
+        {
+          "target": "svc-10",
+          "timeout_ms": 2000,
+          "retries": 2,
+          "base_latency_ms": 34
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-06": {
+      "port": 9006,
+      "calls": [
+        {
+          "target": "svc-14",
+          "timeout_ms": 800,
+          "retries": 1,
+          "base_latency_ms": 39
+        },
+        {
+          "target": "svc-15",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 34
+        },
+        {
+          "target": "svc-10",
+          "timeout_ms": 1500,
+          "retries": 0,
+          "base_latency_ms": 12
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-07": {
+      "port": 9007,
+      "calls": [
+        {
+          "target": "svc-14",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 8
+        },
+        {
+          "target": "svc-15",
+          "timeout_ms": 1200,
+          "retries": 0,
+          "base_latency_ms": 25
+        },
+        {
+          "target": "svc-16",
+          "timeout_ms": 2000,
+          "retries": 1,
+          "base_latency_ms": 9
+        },
+        {
+          "target": "svc-17",
+          "timeout_ms": 1200,
+          "retries": 1,
+          "base_latency_ms": 18
+        },
+        {
+          "target": "svc-10",
+          "timeout_ms": 1500,
+          "retries": 1,
+          "base_latency_ms": 12
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-08": {
+      "port": 9008,
+      "calls": [
+        {
+          "target": "svc-16",
+          "timeout_ms": 1500,
+          "retries": 1,
+          "base_latency_ms": 20
+        },
+        {
+          "target": "svc-15",
+          "timeout_ms": 1500,
+          "retries": 2,
+          "base_latency_ms": 30
+        },
+        {
+          "target": "svc-13",
+          "timeout_ms": 1500,
+          "retries": 1,
+          "base_latency_ms": 13
+        },
+        {
+          "target": "svc-11",
+          "timeout_ms": 2000,
+          "retries": 0,
+          "base_latency_ms": 8
+        },
+        {
+          "target": "svc-10",
+          "timeout_ms": 1500,
+          "retries": 2,
+          "base_latency_ms": 15
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-09": {
+      "port": 9009,
+      "calls": [
+        {
+          "target": "svc-08",
+          "timeout_ms": 1500,
+          "retries": 1,
+          "base_latency_ms": 17
+        },
+        {
+          "target": "svc-12",
+          "timeout_ms": 1200,
+          "retries": 2,
+          "base_latency_ms": 9
+        },
+        {
+          "target": "svc-10",
+          "timeout_ms": 2000,
+          "retries": 0,
+          "base_latency_ms": 21
+        }
+      ],
+      "role": "hub"
+    },
+    "svc-10": {
+      "port": 9010,
+      "calls": [],
+      "role": "spof-leaf"
+    },
+    "svc-11": {
+      "port": 9011,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-12": {
+      "port": 9012,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-13": {
+      "port": 9013,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-14": {
+      "port": 9014,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-15": {
+      "port": 9015,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-16": {
+      "port": 9016,
+      "calls": [],
+      "role": "leaf"
+    },
+    "svc-17": {
+      "port": 9017,
+      "calls": [],
+      "role": "leaf"
+    }
+  },
+  "entrypoints": [
+    "svc-00",
+    "svc-01",
+    "svc-02",
+    "svc-03"
+  ],
+  "spof": "svc-10"
+}
