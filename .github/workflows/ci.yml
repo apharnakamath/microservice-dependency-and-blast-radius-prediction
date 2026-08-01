@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps (for the compose generator + a quick unit check)
+        run: pip install networkx pandas
+
+      - name: Generate docker-compose.yml from topology
+        run: python scripts/generate_compose.py
+
+      - name: Build all images
+        run: docker compose build
+
+      - name: Bring the stack up
+        run: docker compose up -d
+
+      - name: Wait for services to become healthy
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/health > /dev/null; then
+              echo "API is up"; break
+            fi
+            echo "waiting for API... ($i)"; sleep 2
+          done
+
+      - name: Smoke test - health check
+        run: curl -sf http://localhost:8080/health | grep '"ok":true'
+
+      - name: Smoke test - prediction endpoint
+        run: |
+          curl -sf -H "X-API-Key: devkey" \
+            "http://localhost:8080/predict/svc-10" | grep -q blast_radius
+
+      - name: Smoke test - auth is enforced
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:8080/predict/svc-10")
+          if [ "$status" != "401" ]; then
+            echo "expected 401 without API key, got $status"; exit 1
+          fi
+
+      - name: Dump logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
