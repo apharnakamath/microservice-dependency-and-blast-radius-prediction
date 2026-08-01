@@ -30,7 +30,7 @@ Predicts what happens next when a microservice fails: which other services get h
 ## How it works
 
 - **18 services** = 18 real FastAPI processes (one file, `services/app.py`, driven by `SERVICE_NAME` env var + `topology.json` config), calling each other over real HTTP
-- **"Down/slow"** = not killing processes, each service holds an in-memory fault flag, toggled via `POST /admin/fault`. When "down," it deliberately returns 503s at a set probability; when "slow," it adds latency
+- **Down/slow** = not killing processes, each service holds an in-memory fault flag, toggled via `POST /admin/fault`. When **down,** it deliberately returns 503s at a set probability; when **slow,** it adds latency
 - **Cascades are real, not scripted** : every service checks its own downstream call results; if enough dependencies fail, it fails too and passes that failure upward. Nobody hardcodes which services affect which it emerges from real HTTP calls
 - **The fault injector** flips one service's flag, polls all 17 others, and logs (failed service, affected service, severity, time-to-impact) as one labeled training row
 - **The API doesn't touch the live mesh at request time** - it only reads the pre-trained model + static graph features, so it's cheap to run in production without the 18-container mesh behind it
